@@ -1,0 +1,204 @@
+#!/usr/bin/env python3
+
+import argparse
+import json
+import os
+import sys
+
+
+class SquirrelException(Exception):
+    pass
+
+
+class Squirrel:
+    def __init__(self):
+        pass
+
+    def create_args_parser(self):
+        parser = argparse.ArgumentParser(description='Bookmark system between development branches.')
+
+        subparsers = parser.add_subparsers(dest='action')
+        init = subparsers.add_parser('init')
+        bashrc = subparsers.add_parser('bashrc')
+        jump = subparsers.add_parser('jump')
+        candidates = subparsers.add_parser('candidates')
+
+        jump.add_argument('place')
+
+        return parser
+
+    def init(self):
+        if os.path.exists(Squirrel.CONFIG_PATH):
+            raise Exception('error: config file {} already exists; refusing to override.'.format(Squirrel.CONFIG_PATH))
+
+        default_config = {
+            'baseDir': '~/development/',
+            'defaultBranch': 'master',
+            'bookmarks': {}
+        }
+
+        json.dump(default_config, open(Squirrel.CONFIG_PATH, 'w'), indent=4)
+
+        print('successfully initialized default config file: {}'.format(Squirrel.CONFIG_PATH))
+        print('please edit it at will.')
+
+    def bashrc(self):
+        bashrc_script = '''
+function sq {
+    if [ "$#" == "0" ]
+    then
+        echo 'usage:'
+        echo '    sq <branch|bookmark>'
+        return
+    fi
+    local PLACE="$1"
+    local JUMP_PATH
+    JUMP_PATH=$(squirrel jump "$PLACE")
+    if [ "$?" == "0" ]
+    then
+        echo jump to "$JUMP_PATH"
+        cd "$JUMP_PATH"
+    fi
+}
+        '''
+
+        print('please copy the following code and paste in your ~/.bashrc')
+        print(bashrc_script)
+
+    def jump(self, place):
+        self._load_config()
+        place_type = 'UNKNOWN'
+
+        if self._is_branch(place):
+            place_type = 'BRANCH'
+        elif self._is_bookmark(place):
+            place_type = 'BOOKMARK'
+
+        if place_type == 'UNKNOWN':
+            raise SquirrelException('error: {} is not a branch or bookmark name.'.format(place))
+
+        base_path = self._get_base_path()
+        curr_branch = self._get_curr_branch()
+        sub_dir = self._get_sub_dir()
+
+        if curr_branch is None:
+            if place_type == 'BRANCH':
+                jump_path = os.path.join(base_path, place)
+            elif place_type == 'BOOKMARK':
+                default_branch = self._get_default_branch()
+                jump_path = os.path.join(base_path, default_branch, self._get_bookmark_path(place))
+        else:
+            if place_type == 'BRANCH':
+                jump_path = os.path.join(base_path, place, sub_dir)
+            elif place_type == 'BOOKMARK':
+                jump_path = os.path.join(base_path, curr_branch, self._get_bookmark_path(place))
+
+        print(jump_path)
+
+    def candidates(self):
+        self._load_config()
+        branches = self._list_branches()
+        bookmark_names = self._list_bookmark_names()
+        for candidate in branches + bookmark_names:
+            print(candidate)
+
+    def _load_config(self):
+        try:
+            self._config = json.load(open(Squirrel.CONFIG_PATH))
+        except FileNotFoundError:
+            raise SquirrelException('error: config file does not exists: {}'.format(Squirrel.CONFIG_PATH))
+        except IsADirectoryError:
+            raise SquirrelException('error: config file cannot be a directory: {}'.format(Squirrel.CONFIG_PATH))
+        except json.decoder.JSONDecodeError:
+            raise SquirrelException('error: config file is not a valid json file: {}'.format(Squirrel.CONFIG_PATH))
+
+    def _get_config(self, key):
+        try:
+            return self._config[key]
+        except KeyError:
+            raise SquirrelException('error: config key "{}" not found in config file: {}'.format(key, Squirrel.CONFIG_PATH))
+
+    def _get_base_path(self):
+        base_dir = self._get_config('baseDir')
+        return os.path.expanduser(base_dir)
+
+    def _get_default_branch(self):
+        return self._get_config('defaultBranch')
+
+    def _get_bookmarks(self):
+        return self._get_config('bookmarks')
+
+    def _get_bookmark_path(self, bookmark_name):
+        bookmarks = self._get_bookmarks()
+        return bookmarks[bookmark_name]
+
+    def _is_branch(self, place):
+        base_path = self._get_base_path()
+        return os.path.isdir(os.path.join(base_path, place))
+
+    def _is_bookmark(self, place):
+        bookmarks = self._get_bookmarks()
+        return place in bookmarks
+
+    def _get_curr_branch(self):
+        base_path = self._get_base_path()
+        iter_path = os.getcwd()
+        while True:
+            dir_path = os.path.dirname(iter_path)
+            if dir_path == base_path:
+                return os.path.basename(iter_path)
+            if iter_path == dir_path:  # the root path
+                return None
+            iter_path = dir_path
+
+    def _get_sub_dir(self):
+        curr_branch = self._get_curr_branch()
+        if curr_branch is None:
+            return None
+
+        base_path = self._get_base_path()
+        branch_path = os.path.join(base_path, curr_branch)
+        curr_path = os.getcwd()
+        return curr_path[len(branch_path) + 1:]
+
+    def _list_branches(self):
+        base_path = self._get_base_path()
+        filenames = os.listdir(base_path)
+        branches = []
+        for filename in filenames:
+            if os.path.isdir(os.path.join(base_path, filename)):
+                branches.append(filename)
+        return branches
+
+    def _list_bookmark_names(self):
+        bookmarks = self._get_bookmarks()
+        return list(bookmarks.keys())
+
+    CONFIG_PATH = os.path.expanduser('~/.squirrel.json')
+
+
+def main():
+    squirrel = Squirrel()
+    parser = squirrel.create_args_parser()
+    args = parser.parse_args()
+
+    if args.action is None:
+        parser.print_help()
+
+    if args.action == 'init':
+        return squirrel.init()
+    elif args.action == 'bashrc':
+        return squirrel.bashrc()
+    elif args.action == 'jump':
+        return squirrel.jump(args.place)
+    elif args.action == 'candidates':
+        return squirrel.candidates()
+
+
+if __name__ == '__main__':
+    try:
+        main()
+        exit(0)
+    except SquirrelException as e:
+        print(e, file=sys.stderr)
+        exit(1)
