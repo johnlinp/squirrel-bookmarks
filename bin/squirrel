@@ -32,9 +32,12 @@ class Squirrel:
             raise Exception('error: config file {} already exists; refusing to override.'.format(Squirrel.CONFIG_PATH))
 
         default_config = {
-            'baseDir': '~/development/',
+            'baseDir': '~/dev/',
             'defaultBranch': 'master',
-            'bookmarks': {}
+            'bookmarks': {
+                'components': 'client-side/js/components',
+                'resources': 'server-side/src/resources',
+            }
         }
 
         json.dump(default_config, open(Squirrel.CONFIG_PATH, 'w'), indent=4)
