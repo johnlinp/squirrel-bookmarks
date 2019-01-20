@@ -6,7 +6,7 @@ with open(os.path.join(this_directory, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(name='squirrel-bookmarks',
-    version='0.1.0',
+    version='0.1.2',
     description='Bookmark system between development branches.',
     long_description=long_description,
     long_description_content_type='text/markdown',
