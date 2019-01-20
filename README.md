@@ -62,6 +62,11 @@ to install.
 
 ## Setup
 
+You have to setup config and the `sq` bash function first.
+
+
+### Setup Config
+
 Please type:
 
 ```
@@ -71,13 +76,28 @@ $ squirrel init
 to initialize your bookmark config.
 After that, please edit the config at `~/.squirrel.json` to meet your needs.
 
-Then type:
+
+### Setup `sq` function
+
+Please type:
 
 ```
 $ squirrel bashrc
 ```
 
-to show the bashrc script and then copy/paste into your bashrc.
+to show the bashrc script and then copy/paste into your `~/.bashrc` file.
+
+Alternatively, you can do the following:
+
+```
+$ squirrel bashrc >> ~/.bashrc
+```
+
+or if you have `~/.bashrc.d/`, you can type:
+
+```
+$ squirrel bashrc > ~/.bashrc.d/squirrel.bash
+```
 
 
 ## Usage

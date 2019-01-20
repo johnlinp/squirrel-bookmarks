@@ -63,9 +63,10 @@ function sq {
         cd "$JUMP_PATH"
     fi
 }
-        '''
+'''
 
-        print('please copy the following code and paste in your ~/.bashrc')
+        print()
+        print('# please put the following code in your ~/.bashrc or ~/.bashrc.d')
         print(bashrc_script)
 
     def jump(self, place):
