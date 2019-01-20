@@ -54,7 +54,7 @@ Currently only supports Python 3.5+.
 Please type:
 
 ```
-$ pip3 install squirrel-bookmarks
+$ sudo pip3 install squirrel-bookmarks
 ```
 
 to install.
