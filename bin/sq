@@ -1,0 +1,14 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+
+
+if __name__ == '__main__':
+    print('The command sq is not setup yet.', file=sys.stderr)
+    if os.path.exists(os.path.expanduser('~/.bashrc.d')):
+        print('Please type "squirrel bashrc > ~/.bashrc.d/squirrel.bash"', file=sys.stderr)
+    else:
+        print('Please type "squirrel bashrc >> ~/.bashrc"', file=sys.stderr)
+    print('and then restart the shell.', file=sys.stderr)
+    exit(1)

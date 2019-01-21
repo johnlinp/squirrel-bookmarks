@@ -15,7 +15,10 @@ setup(name='squirrel-bookmarks',
     url='https://github.com/johnlinp/squirrel-bookmarks',
     license='New BSD License',
     python_requires='>=3.5',
-    scripts=['bin/squirrel'],
+    scripts=[
+        'bin/squirrel',
+        'bin/sq',
+    ],
     data_files=[
         ('etc/bash_completion.d', ['etc/bash_completion.d/sq'])
     ]

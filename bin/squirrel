@@ -64,9 +64,13 @@ function sq {
     fi
 }
 '''
+        if os.path.exists(os.path.expanduser('~/.bashrc.d')):
+            bashrc_location = '~/.bashrc.d/squirrel.bash'
+        else:
+            bashrc_location = '~/.bashrc'
 
         print()
-        print('# please put the following code in your ~/.bashrc or ~/.bashrc.d')
+        print('# please put the following code in your {}'.format(bashrc_location))
         print(bashrc_script)
 
     def jump(self, place):
