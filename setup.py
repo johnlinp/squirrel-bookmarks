@@ -20,6 +20,6 @@ setup(name='squirrel-bookmarks',
         'bin/sq',
     ],
     data_files=[
-        ('etc/bash_completion.d', ['etc/bash_completion.d/sq'])
+        ('etc/bash_completion.d', ['etc/bash_completion.d/sq', 'etc/bash_completion.d/squirrel'])
     ]
 )

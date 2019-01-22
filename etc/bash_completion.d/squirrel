@@ -1,0 +1,17 @@
+function _squirrel_bash_completion {
+    local CANDIDATES
+
+    if [ "${#COMP_WORDS[@]}" == "2" ]
+    then
+        CANDIDATES="init bashrc jump candidates"
+    elif [ "${COMP_WORDS[1]}" == "jump" ] && [ "${#COMP_WORDS[@]}" == "3" ]
+    then
+        CANDIDATES=$(squirrel candidates)
+    else
+        return
+    fi
+
+    COMPREPLY=($(compgen -W "$CANDIDATES" "${COMP_WORDS[$COMP_CWORD]}"))
+}
+
+complete -F _squirrel_bash_completion squirrel
