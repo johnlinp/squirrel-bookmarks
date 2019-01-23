@@ -29,7 +29,7 @@ class Squirrel:
 
     def init_config(self):
         if os.path.exists(Squirrel.CONFIG_PATH):
-            raise Exception('error: config file {} already exists; refusing to override.'.format(Squirrel.CONFIG_PATH))
+            raise SquirrelException('error: config file {} already exists; refusing to override.'.format(Squirrel.CONFIG_PATH))
 
         default_config = {
             'baseDir': '~/dev/',
