@@ -3,7 +3,7 @@ function _squirrel_bash_completion {
 
     if [ "${#COMP_WORDS[@]}" == "2" ]
     then
-        CANDIDATES="init bashrc jump candidates"
+        CANDIDATES="init-config bashrc jump candidates"
     elif [ "${COMP_WORDS[1]}" == "jump" ] && [ "${#COMP_WORDS[@]}" == "3" ]
     then
         CANDIDATES=$(squirrel candidates)

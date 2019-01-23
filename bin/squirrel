@@ -18,7 +18,7 @@ class Squirrel:
         parser = argparse.ArgumentParser(description='Bookmark system between development branches.')
 
         subparsers = parser.add_subparsers(dest='action')
-        init = subparsers.add_parser('init')
+        init_config = subparsers.add_parser('init-config')
         bashrc = subparsers.add_parser('bashrc')
         jump = subparsers.add_parser('jump')
         candidates = subparsers.add_parser('candidates')
@@ -27,7 +27,7 @@ class Squirrel:
 
         return parser
 
-    def init(self):
+    def init_config(self):
         if os.path.exists(Squirrel.CONFIG_PATH):
             raise Exception('error: config file {} already exists; refusing to override.'.format(Squirrel.CONFIG_PATH))
 
@@ -196,8 +196,8 @@ def main():
     if args.action is None:
         parser.print_help()
 
-    if args.action == 'init':
-        return squirrel.init()
+    if args.action == 'init-config':
+        return squirrel.init_config()
     elif args.action == 'bashrc':
         return squirrel.bashrc()
     elif args.action == 'jump':

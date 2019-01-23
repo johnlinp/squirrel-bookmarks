@@ -70,7 +70,7 @@ You have to setup config and the `sq` bash function first.
 Please type:
 
 ```
-$ squirrel init
+$ squirrel init-config
 ```
 
 to initialize your bookmark config.
