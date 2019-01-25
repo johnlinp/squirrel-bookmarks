@@ -60,12 +60,9 @@ $ sudo pip3 install squirrel-bookmarks
 to install.
 
 
-## Setup
+## Setup Config
 
-You have to setup config and the `sq` bash function first.
-
-
-### Setup Config
+You have to setup config first.
 
 Please type:
 
@@ -73,31 +70,9 @@ Please type:
 $ squirrel init-config
 ```
 
-to initialize your bookmark config.
-After that, please edit the config at `~/.squirrel.json` to meet your needs.
+to initialize your bookmark config at `~/.squirrel.json`.
 
-
-### Setup `sq` function
-
-Please type:
-
-```
-$ squirrel bashrc
-```
-
-to show the bashrc script and then copy/paste into your `~/.bashrc` file.
-
-Alternatively, you can do the following:
-
-```
-$ squirrel bashrc >> ~/.bashrc
-```
-
-or if you have `~/.bashrc.d/`, you can type:
-
-```
-$ squirrel bashrc > ~/.bashrc.d/squirrel.bash
-```
+After that, please edit `~/.squirrel.json` to meet your needs.
 
 
 ## Usage

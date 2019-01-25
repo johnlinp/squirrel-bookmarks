@@ -19,7 +19,6 @@ class Squirrel:
 
         subparsers = parser.add_subparsers(dest='action')
         init_config = subparsers.add_parser('init-config')
-        bashrc = subparsers.add_parser('bashrc')
         jump = subparsers.add_parser('jump')
         candidates = subparsers.add_parser('candidates')
 
@@ -44,34 +43,6 @@ class Squirrel:
 
         print('successfully initialized default config file: {}'.format(Squirrel.CONFIG_PATH))
         print('please edit it at will.')
-
-    def bashrc(self):
-        bashrc_script = '''
-function sq {
-    if [ "$#" == "0" ]
-    then
-        echo 'usage:'
-        echo '    sq <branch|bookmark>'
-        return
-    fi
-    local PLACE="$1"
-    local JUMP_PATH
-    JUMP_PATH=$(squirrel jump "$PLACE")
-    if [ "$?" == "0" ]
-    then
-        echo jump to "$JUMP_PATH"
-        cd "$JUMP_PATH"
-    fi
-}
-'''
-        if os.path.exists(os.path.expanduser('~/.bashrc.d')):
-            bashrc_location = '~/.bashrc.d/squirrel.bash'
-        else:
-            bashrc_location = '~/.bashrc'
-
-        print()
-        print('# please put the following code in your {}'.format(bashrc_location))
-        print(bashrc_script)
 
     def jump(self, place):
         self._load_config()
@@ -198,8 +169,6 @@ def main():
 
     if args.action == 'init-config':
         return squirrel.init_config()
-    elif args.action == 'bashrc':
-        return squirrel.bashrc()
     elif args.action == 'jump':
         return squirrel.jump(args.place)
     elif args.action == 'candidates':
