@@ -49,6 +49,14 @@ jump to /Users/johnlinp/dev/production/server-side/src/resources
 Currently only supports Python 3.5+.
 
 
+## Operation System
+
+Currently tested on:
+
+- macOS 10.13.6 (High Sierra)
+- Ubuntu 18.04 (Bionic Beaver)
+
+
 ## Install
 
 Please type:
