@@ -21,6 +21,7 @@ class Squirrel:
         init_config = subparsers.add_parser('init-config')
         jump = subparsers.add_parser('jump')
         candidates = subparsers.add_parser('candidates')
+        curr_branch = subparsers.add_parser('curr-branch')
 
         jump.add_argument('place')
 
@@ -80,6 +81,12 @@ class Squirrel:
         bookmark_names = self._list_bookmark_names()
         for candidate in branches + bookmark_names:
             print(candidate)
+
+    def curr_branch(self):
+        self._load_config()
+        curr_branch = self._get_curr_branch()
+        if curr_branch is not None:
+            print(curr_branch)
 
     def _load_config(self):
         try:
@@ -173,6 +180,8 @@ def main():
         return squirrel.jump(args.place)
     elif args.action == 'candidates':
         return squirrel.candidates()
+    elif args.action == 'curr-branch':
+        return squirrel.curr_branch()
 
 
 if __name__ == '__main__':
