@@ -19,7 +19,7 @@ if platform.system() == 'Linux':
         data_files = data_files + extra_data_files
 
 setup(name='squirrel-bookmarks',
-    version='0.1.7',
+    version='0.1.8',
     description='Bookmark system between development branches.',
     long_description=long_description,
     long_description_content_type='text/markdown',
