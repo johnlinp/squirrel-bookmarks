@@ -2,15 +2,19 @@
 
 import os
 import sys
+import pathlib
 
 
 if __name__ == '__main__':
-    print('The command sq is not setup yet.', file=sys.stderr)
-    print('Please restart your shell and try again.', file=sys.stderr)
-    print('', file=sys.stderr)
-    print('If you keep seeing this message, please put', file=sys.stderr)
-    print('', file=sys.stderr)
-    print('    source /usr/local/etc/profile.d/sq.sh', file=sys.stderr)
-    print('', file=sys.stderr)
-    print('in your ~/.bashrc and restart your shell again.', file=sys.stderr)
+    error_message = f'''
+The command sq is not setup yet.
+Please restart your shell and try again.
+
+If you keep seeing this message, please put
+
+    source /usr/local/etc/profile.d/sq.sh
+
+in your ~/.bashrc and restart your shell again.
+    '''.strip()
+    print(error_message, file=sys.stderr)
     exit(1)
