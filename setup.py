@@ -19,7 +19,7 @@ if platform.system() == 'Linux':
         data_files = data_files + extra_data_files
 
 setup(name='squirrel-bookmarks',
-    version='0.1.8',
+    version='0.1.9',
     description='Bookmark system between development branches.',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -28,6 +28,9 @@ setup(name='squirrel-bookmarks',
     url='https://github.com/johnlinp/squirrel-bookmarks',
     license='New BSD License',
     python_requires='>=3.5',
+    install_requires=[
+        'PyYAML',
+    ],
     scripts=[
         'bin/squirrel',
         'bin/sq',

@@ -78,9 +78,9 @@ Please type:
 $ squirrel init-config
 ```
 
-to initialize your bookmark config at `~/.squirrel.json`.
+to initialize your bookmark config at `~/.squirrel.yaml`.
 
-After that, please edit `~/.squirrel.json` to meet your needs.
+After that, please edit `~/.squirrel.yaml` to meet your needs.
 
 
 ## Usage
