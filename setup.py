@@ -28,6 +28,9 @@ setup(name='squirrel-bookmarks',
     url='https://github.com/johnlinp/squirrel-bookmarks',
     license='New BSD License',
     python_requires='>=3.5',
+    install_requires=[
+        'PyYAML',
+    ],
     scripts=[
         'bin/squirrel',
         'bin/sq',

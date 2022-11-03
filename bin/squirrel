@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 import argparse
-import json
 import os
 import sys
+import yaml
 
 
 class SquirrelException(Exception):
@@ -31,16 +31,22 @@ class Squirrel:
         if os.path.exists(Squirrel.CONFIG_PATH):
             raise SquirrelException('error: config file {} already exists; refusing to override.'.format(Squirrel.CONFIG_PATH))
 
-        default_config = {
-            'baseDir': '~/dev/',
-            'defaultBranch': 'master',
-            'bookmarks': {
-                'components': 'client-side/js/components',
-                'resources': 'server-side/src/resources',
-            }
-        }
+        default_config = '''
+# the base directory of the source code
+baseDir: "~/dev/"
 
-        json.dump(default_config, open(Squirrel.CONFIG_PATH, 'w'), indent=4)
+# the default branch when jumping to a bookmark
+# should be a sub-directory name in baseDir
+defaultBranch: "master"
+
+# the bookmarks of relative paths in branch sub-directories
+bookmarks:
+  components: "client-side/js/components"
+  resources: "server-side/src/resources"
+        '''
+
+        with open(Squirrel.CONFIG_PATH, 'w') as f:
+            f.write(default_config.strip())
 
         print('successfully initialized default config file: {}'.format(Squirrel.CONFIG_PATH))
         print('please edit it at will.')
@@ -90,13 +96,14 @@ class Squirrel:
 
     def _load_config(self):
         try:
-            self._config = json.load(open(Squirrel.CONFIG_PATH))
+            with open(Squirrel.CONFIG_PATH) as f:
+                self._config = yaml.safe_load(f)
         except FileNotFoundError:
             raise SquirrelException('error: config file does not exists: {}'.format(Squirrel.CONFIG_PATH))
         except IsADirectoryError:
             raise SquirrelException('error: config file cannot be a directory: {}'.format(Squirrel.CONFIG_PATH))
-        except json.decoder.JSONDecodeError:
-            raise SquirrelException('error: config file is not a valid json file: {}'.format(Squirrel.CONFIG_PATH))
+        except yaml.YAMLError:
+            raise SquirrelException('error: config file is not a valid yaml file: {}'.format(Squirrel.CONFIG_PATH))
 
     def _get_config(self, key):
         try:
@@ -163,7 +170,7 @@ class Squirrel:
         bookmarks = self._get_bookmarks()
         return list(bookmarks.keys())
 
-    CONFIG_PATH = os.path.expanduser('~/.squirrel.json')
+    CONFIG_PATH = os.path.expanduser('~/.squirrel.yaml')
 
 
 def main():
